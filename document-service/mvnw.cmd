@@ -27,6 +27,12 @@
 @REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
 @REM ----------------------------------------------------------------------------
 
+@IF "%JAVA_HOME%"=="" GOTO :set_default_java_home
+@IF EXIST "%JAVA_HOME%\bin\java.exe" GOTO :java_home_ready
+:set_default_java_home
+@IF EXIST "C:\Program Files\Java\jdk-21\bin\java.exe" SET "JAVA_HOME=C:\Program Files\Java\jdk-21"
+:java_home_ready
+
 @IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
 @SET __MVNW_CMD__=
 @SET __MVNW_ERROR__=
