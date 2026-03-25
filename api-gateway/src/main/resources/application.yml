@@ -1,0 +1,42 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      mvc:
+        default-filters:
+          - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        routes:
+          - id: auth-service
+            uri: lb://AUTH-SERVICE
+            predicates:
+              - Path=/auth/**
+
+          - id: application-service
+            uri: lb://APPLICATION-SERVICE
+            predicates:
+              - Path=/applications/**
+
+          - id: document-service
+            uri: lb://DOCUMENT-SERVICE
+            predicates:
+              - Path=/documents/**
+
+          - id: admin-service
+            uri: lb://ADMIN-SERVICE
+            predicates:
+              - Path=/admin/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+application:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:ThisIsADevelopmentOnlyJwtSecretKeyForFinFlowAuthService123456789}

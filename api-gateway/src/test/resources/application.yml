@@ -1,0 +1,10 @@
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+application:
+  security:
+    jwt:
+      secret: ThisIsADevelopmentOnlyJwtSecretKeyForFinFlowAuthService123456789
