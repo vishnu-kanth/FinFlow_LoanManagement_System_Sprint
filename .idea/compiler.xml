@@ -10,6 +10,7 @@
         <module name="api-gateway" />
         <module name="Eureka-Server" />
         <module name="auth-service" />
+        <module name="admin-service" />
       </profile>
       <profile name="Annotation profile for doucument-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -20,7 +21,6 @@
         </processorPath>
         <module name="doucument-service" />
         <module name="application-service" />
-        <module name="admin-service" />
       </profile>
     </annotationProcessing>
   </component>

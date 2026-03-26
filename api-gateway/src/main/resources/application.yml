@@ -7,29 +7,8 @@ spring:
 
   cloud:
     gateway:
-      mvc:
-        default-filters:
-          - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-        routes:
-          - id: auth-service
-            uri: lb://AUTH-SERVICE
-            predicates:
-              - Path=/auth/**
-
-          - id: application-service
-            uri: lb://APPLICATION-SERVICE
-            predicates:
-              - Path=/applications/**
-
-          - id: document-service
-            uri: lb://DOCUMENT-SERVICE
-            predicates:
-              - Path=/documents/**
-
-          - id: admin-service
-            uri: lb://ADMIN-SERVICE
-            predicates:
-              - Path=/admin/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
 
 eureka:
   client:
@@ -40,3 +19,8 @@ application:
   security:
     jwt:
       secret: ${JWT_SECRET:ThisIsADevelopmentOnlyJwtSecretKeyForFinFlowAuthService123456789}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.cloud.gateway: DEBUG

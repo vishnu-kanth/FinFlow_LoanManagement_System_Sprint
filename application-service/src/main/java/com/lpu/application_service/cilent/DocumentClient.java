@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-@FeignClient(name = "DOCUMENT-SERVICE", url = "http://localhost:8083")
+@FeignClient(name = "DOCUMENT-SERVICE")
 public interface DocumentClient {
 
-    @PostMapping(value = "/documents/upload/{applicationId}", consumes = "multipart/form-data")
-    String uploadDocument(@PathVariable Long applicationId,
-                          @RequestPart("file") MultipartFile file);
+    @PostMapping("/documents/upload/{applicationId}")
+    String uploadDocument(@PathVariable Long applicationId);
 }

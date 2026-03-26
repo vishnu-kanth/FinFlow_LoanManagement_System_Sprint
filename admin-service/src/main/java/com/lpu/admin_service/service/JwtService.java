@@ -1,11 +1,9 @@
-package com.lpu.auth_service.service;
+package com.lpu.admin_service.service;
 
-import com.lpu.auth_service.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -19,21 +17,7 @@ public class JwtService {
     @Value("${application.security.jwt.secret}")
     private String secretKey;
 
-    @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
-
-    // Generate Token
-    public String generateToken(User user) {
-        return Jwts.builder()
-                .subject(user.getEmail())
-                .claim("role", user.getRole())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSignInKey())
-                .compact();
-    }
-
-    // Extract Username (Email)
+    // Extract Username
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -48,14 +32,8 @@ public class JwtService {
         return resolver.apply(extractAllClaims(token));
     }
 
-    //  Validate Token
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    //  Check Expiration
-    private boolean isTokenExpired(String token) {
+    // Check Expiry
+    public boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
@@ -68,7 +46,7 @@ public class JwtService {
                 .getPayload();
     }
 
-    // Secret Key
+    //  Secret Key
     private SecretKey getSignInKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }

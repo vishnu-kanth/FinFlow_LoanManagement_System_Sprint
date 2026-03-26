@@ -22,3 +22,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+application:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:ThisIsADevelopmentOnlyJwtSecretKeyForFinFlowAuthService123456789}

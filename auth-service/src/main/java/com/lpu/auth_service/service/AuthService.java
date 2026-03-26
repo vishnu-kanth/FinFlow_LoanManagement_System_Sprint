@@ -3,9 +3,9 @@ package com.lpu.auth_service.service;
 import com.lpu.auth_service.dto.AuthRequest;
 import com.lpu.auth_service.dto.AuthResponse;
 import com.lpu.auth_service.entity.User;
-import com.lpu.auth_service.exception.BadRequestException;
-import com.lpu.auth_service.exception.ResourceConflictException;
+import com.lpu.auth_service.exception.CustomException;
 import com.lpu.auth_service.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+
 public class AuthService {
 
     private final UserRepository repository;
@@ -20,32 +22,25 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public AuthService(UserRepository repository,
-                       PasswordEncoder passwordEncoder,
-                       AuthenticationManager authenticationManager,
-                       JwtService jwtService) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
-
     public AuthResponse register(AuthRequest request) {
+
         if (request.getEmail() == null || request.getPassword() == null || request.getName() == null) {
-            throw new BadRequestException("Name, email and password are required");
+            throw new CustomException("Name, email and password are required");
         }
 
         if (repository.existsByEmail(request.getEmail())) {
-            throw new ResourceConflictException("Email is already registered");
+            throw new CustomException("Email is already registered");
         }
 
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
+        //  encrypted
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("APPLICANT");
+        user.setRole("ROLE_APPLICANT");
 
         User savedUser = repository.save(user);
+
         String token = jwtService.generateToken(savedUser);
 
         return AuthResponse.builder()
@@ -57,18 +52,24 @@ public class AuthService {
     }
 
     public AuthResponse login(AuthRequest request) {
+
         if (request.getEmail() == null || request.getPassword() == null) {
-            throw new BadRequestException("Email and password are required");
+            throw new CustomException("Email and password are required");
+        }
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new CustomException("Invalid email or password");
         }
 
         User user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
-
-        upgradeLegacyPasswordIfRequired(user, request.getPassword());
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+                .orElseThrow(() -> new CustomException("User not found"));
 
         String token = jwtService.generateToken(user);
 
@@ -82,18 +83,6 @@ public class AuthService {
 
     public User getUserByEmail(String email) {
         return repository.findByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("User not found"));
-    }
-
-    private void upgradeLegacyPasswordIfRequired(User user, String rawPassword) {
-        String storedPassword = user.getPassword();
-        if (storedPassword == null || storedPassword.startsWith("$2")) {
-            return;
-        }
-
-        if (storedPassword.equals(rawPassword)) {
-            user.setPassword(passwordEncoder.encode(rawPassword));
-            repository.save(user);
-        }
+                .orElseThrow(() -> new CustomException("User not found"));
     }
 }

@@ -1,5 +1,4 @@
-package com.lpu.auth_service.exception;
-
+package com.lpu.application_service.exception;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
