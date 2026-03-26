@@ -1,8 +1,7 @@
-package com.lpu.doucument_service.service;
+package com.lpu.document_service.service;
 
-import com.lpu.doucument_service.entity.Document;
-import com.lpu.doucument_service.repository.DocumentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lpu.document_service.entity.Document;
+import com.lpu.document_service.repository.DocumentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +18,11 @@ public class DocumentService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @Autowired
-    private DocumentRepository repository;
+    private final DocumentRepository repository;
+
+    public DocumentService(DocumentRepository repository) {
+        this.repository = repository;
+    }
 
     public Document saveFile(Long applicationId, MultipartFile file) throws IOException {
 
@@ -33,6 +35,10 @@ public class DocumentService {
         }
 
         Path filePath = uploadPath.resolve(originalFilename).normalize();
+
+        if (!filePath.startsWith(uploadPath)) {
+            throw new IOException("Invalid file path detected");
+        }
 
         File dest = filePath.toFile();
         file.transferTo(dest);

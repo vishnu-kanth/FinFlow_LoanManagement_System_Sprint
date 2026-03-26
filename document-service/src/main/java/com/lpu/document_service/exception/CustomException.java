@@ -1,7 +1,6 @@
-package com.lpu.doucument_service.exception;
+package com.lpu.document_service.exception;
 
 public class CustomException extends RuntimeException {
-
     public CustomException(String message) {
         super(message);
     }

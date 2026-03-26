@@ -24,3 +24,16 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.cloud.gateway: DEBUG
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    urls:
+      - name: AUTH-SERVICE
+        url: /gateway/auth/v3/api-docs
+      - name: APPLICATION-SERVICE
+        url: /gateway/applications/v3/api-docs
+      - name: DOCUMENT-SERVICE
+        url: /gateway/documents/v3/api-docs
+      - name: ADMIN-SERVICE
+        url: /gateway/admin/v3/api-docs

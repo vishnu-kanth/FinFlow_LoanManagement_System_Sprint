@@ -1,4 +1,4 @@
-package com.lpu.doucument_service.service;
+package com.lpu.document_service.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -25,6 +25,7 @@ public class ServiceRoutes {
                         .path("/gateway/auth/**")
                         .filters(f -> f
                                 .rewritePath("/gateway/(?<segment>.*)", "/${segment}")
+                                .filter(jwtAuthFilter)
                         )
                         .uri("lb://AUTH-SERVICE")
                 )

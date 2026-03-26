@@ -1,6 +1,6 @@
-package com.lpu.doucument_service.security;
+package com.lpu.document_service.security;
 
-import com.lpu.doucument_service.service.JwtService;
+import com.lpu.document_service.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Component

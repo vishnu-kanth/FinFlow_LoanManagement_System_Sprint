@@ -1,10 +1,10 @@
-package com.lpu.doucument_service;
+package com.lpu.document_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DoucumentServiceApplicationTests {
+class DocumentServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

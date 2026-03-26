@@ -5,7 +5,11 @@ import lombok.Data;
 @Data
 public class ApplicationRequest {
 
-    private Long userId;
     private Double amount;
+    private String purpose;
+    private Integer tenure;
+    private String employmentType;
+    private Double monthlyIncome;
+    private String panNumber;
 
 }

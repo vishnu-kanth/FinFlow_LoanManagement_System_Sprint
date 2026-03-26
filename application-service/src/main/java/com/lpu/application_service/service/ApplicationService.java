@@ -1,6 +1,6 @@
 package com.lpu.application_service.service;
 
-import com.lpu.application_service.cilent.DocumentClient;
+import com.lpu.application_service.client.DocumentClient;
 import com.lpu.application_service.dto.ApplicationRequest;
 import com.lpu.application_service.dto.ApplicationResponse;
 import com.lpu.application_service.entity.LoanApplication;
@@ -19,15 +19,20 @@ public class ApplicationService {
     private final DocumentClient documentClient;
 
     // CREATE APPLICATION
-    public ApplicationResponse create(ApplicationRequest request) {
+    public ApplicationResponse create(ApplicationRequest request, Long userId) {
 
-        if (request.getUserId() == null || request.getAmount() == null) {
+        if (userId == null || request.getAmount() == null) {
             throw new CustomException("UserId and Amount are required");
         }
 
         LoanApplication app = new LoanApplication();
-        app.setUserId(request.getUserId());
+        app.setUserId(userId);
         app.setAmount(request.getAmount());
+        app.setPurpose(request.getPurpose());
+        app.setTenure(request.getTenure());
+        app.setEmploymentType(request.getEmploymentType());
+        app.setMonthlyIncome(request.getMonthlyIncome());
+        app.setPanNumber(request.getPanNumber());
         app.setStatus("DRAFT");
         app.setCreatedAt(LocalDateTime.now());
 
@@ -49,10 +54,14 @@ public class ApplicationService {
     }
 
     // SUBMIT APPLICATION
-    public ApplicationResponse submit(Long id) {
+    public ApplicationResponse submit(Long id, Long userId) {
 
         LoanApplication app = repo.findById(id)
                 .orElseThrow(() -> new CustomException("Application not found"));
+
+        if (!app.getUserId().equals(userId)) {
+            throw new CustomException("You do not have permission to submit this application");
+        }
 
         if (!"DRAFT".equals(app.getStatus())) {
             throw new CustomException("Only DRAFT applications can be submitted");

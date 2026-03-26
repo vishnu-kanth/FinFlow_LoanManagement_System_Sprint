@@ -16,14 +16,13 @@ import java.util.Map;
 @Component
 public class JwtAuthFilter implements GatewayFilter, Ordered {
 
-    private final JwtUtil jwtUtil;
-
-    // RBAC: map gateway path prefixes to the roles that are allowed
     private static final Map<String, List<String>> PATH_ROLE_MAP = Map.of(
-            "/gateway/admin", List.of("ADMIN"),
-            "/gateway/applications", List.of("APPLICANT", "ADMIN"),
-            "/gateway/documents", List.of("APPLICANT", "ADMIN")
+            "/gateway/admin", List.of("ROLE_ADMIN"),
+            "/gateway/applications", List.of("ROLE_APPLICANT", "ROLE_ADMIN"),
+            "/gateway/documents", List.of("ROLE_APPLICANT", "ROLE_ADMIN")
     );
+
+    private final JwtUtil jwtUtil;
 
     public JwtAuthFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -31,42 +30,38 @@ public class JwtAuthFilter implements GatewayFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
 
-        // ── 1. Extract and validate token ──────────────────────────────
-        String authHeader = request.getHeaders().getFirst("Authorization");
+        if (isPublicPath(path)) {
+            return chain.filter(exchange);
+        }
 
+        String authHeader = request.getHeaders().getFirst("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return unauthorized(exchange);
         }
 
         String token = authHeader.substring(7);
-
         if (!jwtUtil.validateToken(token)) {
             return unauthorized(exchange);
         }
 
-        // ── 2. Extract claims ──────────────────────────────────────────
         String username = jwtUtil.extractUsername(token);
         String role = jwtUtil.extractRole(token);
+        Long userId = jwtUtil.extractUserId(token);
 
-        // ── 3. RBAC – check role against path ──────────────────────────
         for (Map.Entry<String, List<String>> entry : PATH_ROLE_MAP.entrySet()) {
-            if (path.startsWith(entry.getKey())) {
-                if (!entry.getValue().contains(role)) {
-                    return forbidden(exchange);
-                }
-                break;
+            if (path.startsWith(entry.getKey()) && !entry.getValue().contains(role)) {
+                return forbidden(exchange);
             }
         }
 
-        // ── 4. Forward user info to downstream services ────────────────
         ServerWebExchange mutatedExchange = exchange.mutate()
-                .request(r -> r.headers(headers -> {
+                .request(builder -> builder.headers(headers -> {
                     headers.add("X-User-Email", username);
                     headers.add("X-User-Role", role);
+                    headers.add("X-User-Id", String.valueOf(userId));
                 }))
                 .build();
 
@@ -75,7 +70,16 @@ public class JwtAuthFilter implements GatewayFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -1; // run before other filters
+        return -1;
+    }
+
+    private boolean isPublicPath(String path) {
+        return path.endsWith("/v3/api-docs")
+                || path.contains("/v3/api-docs/")
+                || path.contains("/swagger-ui")
+                || path.endsWith("/swagger-ui.html")
+                || path.endsWith("/auth/signup")
+                || path.endsWith("/auth/login");
     }
 
     private Mono<Void> unauthorized(ServerWebExchange exchange) {
