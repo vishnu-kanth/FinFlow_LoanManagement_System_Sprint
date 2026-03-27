@@ -1,24 +1,18 @@
-package com.lpu.application_service.entity;
+package com.lpu.application_service.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "loan_application")
-public class LoanApplication {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+@NoArgsConstructor
+@Builder
+public class ApplicationDetailResponse {
     private Long id;
-
     private Long userId;
     private Double amount;
     private String purpose;
@@ -28,10 +22,7 @@ public class LoanApplication {
     private String panNumber;
     private String status;
     private LocalDateTime createdAt;
-
-    @org.hibernate.annotations.UpdateTimestamp
     private LocalDateTime updatedAt;
-
     private LocalDateTime submittedAt;
     private LocalDateTime reviewedAt;
     private String reviewedBy;

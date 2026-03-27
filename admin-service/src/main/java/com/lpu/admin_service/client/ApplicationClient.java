@@ -9,4 +9,10 @@ public interface ApplicationClient {
 
     @GetMapping("/applications/{id}")
     Object getApplication(@PathVariable Long id);
+
+    @GetMapping("/applications")
+    Object getAllApplications();
+
+    @GetMapping("/applications/status/{status}")
+    Object getByStatus(@PathVariable String status);
 }

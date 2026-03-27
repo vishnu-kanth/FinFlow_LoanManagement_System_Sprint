@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: ${SERVER_PORT:9000}
 
 spring:
   application:
@@ -27,7 +27,9 @@ logging:
 
 springdoc:
   swagger-ui:
+    path: /swagger-ui.html
     disable-swagger-default-url: true
+    urls-primary-name: AUTH-SERVICE
     urls:
       - name: AUTH-SERVICE
         url: /gateway/auth/v3/api-docs

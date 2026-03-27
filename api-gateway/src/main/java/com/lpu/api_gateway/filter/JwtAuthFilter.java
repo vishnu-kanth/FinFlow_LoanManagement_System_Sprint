@@ -74,10 +74,10 @@ public class JwtAuthFilter implements GatewayFilter, Ordered {
     }
 
     private boolean isPublicPath(String path) {
-        return path.endsWith("/v3/api-docs")
-                || path.contains("/v3/api-docs/")
+        return path.contains("/v3/api-docs")
                 || path.contains("/swagger-ui")
-                || path.endsWith("/swagger-ui.html")
+                || path.contains("/swagger-resources")
+                || path.contains("/webjars")
                 || path.endsWith("/auth/signup")
                 || path.endsWith("/auth/login");
     }

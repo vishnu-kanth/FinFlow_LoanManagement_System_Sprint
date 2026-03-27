@@ -2,6 +2,8 @@ package com.lpu.auth_service.service;
 
 import com.lpu.auth_service.dto.AuthRequest;
 import com.lpu.auth_service.dto.AuthResponse;
+import com.lpu.auth_service.dto.UserProfileResponse;
+import com.lpu.auth_service.dto.UserUpdateRequest;
 import com.lpu.auth_service.entity.User;
 import com.lpu.auth_service.exception.CustomException;
 import com.lpu.auth_service.repository.UserRepository;
@@ -11,6 +13,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +55,7 @@ public class AuthService {
                 .build();
     }
 
+
     public AuthResponse login(AuthRequest request) {
 
         if (request.getEmail() == null || request.getPassword() == null) {
@@ -75,6 +80,74 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .message("Login Successful")
+                .token(token)
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+    }
+    public UserProfileResponse getProfile(String email) {
+
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new CustomException("User not found"));
+
+        return new UserProfileResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+    public AuthResponse update(String email, UserUpdateRequest request) {
+
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new CustomException("User not found"));
+
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+
+        if (request.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        repository.save(user);
+
+        return AuthResponse.builder()
+                .message("User updated successfully")
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+    }
+
+    public List<UserProfileResponse> getAllUsers() {
+
+        return repository.findAll().stream()
+                .map(user -> new UserProfileResponse(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole()
+                ))
+                .toList();
+    }
+    public String deleteUser(Long id) {
+        repository.deleteById(id);
+        return "User deleted successfully";
+    }
+
+    public String logout() {
+        return "Logout successful (client should discard token)";
+    }
+
+    public AuthResponse refreshToken(String email) {
+
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new CustomException("User not found"));
+
+        String token = jwtService.generateToken(user);
+
+        return AuthResponse.builder()
+                .message("Token refreshed")
                 .token(token)
                 .email(user.getEmail())
                 .role(user.getRole())

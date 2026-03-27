@@ -3,14 +3,15 @@ package com.lpu.auth_service.controller;
 import com.lpu.auth_service.dto.AuthRequest;
 import com.lpu.auth_service.dto.AuthResponse;
 import com.lpu.auth_service.dto.UserProfileResponse;
+import com.lpu.auth_service.dto.UserUpdateRequest;
 import com.lpu.auth_service.entity.User;
 import com.lpu.auth_service.service.AuthService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,6 +31,37 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
         return service.login(request);
+    }
+    @PutMapping("/update")
+    public AuthResponse update(Principal principal,
+                               @RequestBody UserUpdateRequest request) {
+        return service.update(principal.getName(), request);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/users")
+    public List<UserProfileResponse> getUsers() {
+        return service.getAllUsers();
+    }
+
+    @GetMapping("/profile")
+    public UserProfileResponse profile(Principal principal) {
+        return service.getProfile(principal.getName());
+    }
+
+    @PostMapping("/logout")
+    public String logout() {
+        return service.logout();
+    }
+
+    @PostMapping("/refresh-token")
+    public AuthResponse refresh(Principal principal) {
+        return service.refreshToken(principal.getName());
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/user/{id}")
+    public String delete(@PathVariable Long id) {
+        return service.deleteUser(id);
     }
 
     @GetMapping("/me")
