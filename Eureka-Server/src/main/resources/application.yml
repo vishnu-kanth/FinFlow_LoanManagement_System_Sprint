@@ -1,11 +1,8 @@
-server:
-  port: ${SERVER_PORT:8761}
-
 spring:
   application:
     name: EUREKA-SERVER
-
-eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+  cloud:
+    config:
+      label: ${CONFIG_REPO_LABEL:main}

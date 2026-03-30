@@ -24,9 +24,10 @@ public class AdminController {
     @PostMapping("/applications/{id}/decision")
     public DecisionResponse decideById(
             @PathVariable Long id,
-            @RequestBody DecisionRequest request) {
+            @RequestBody DecisionRequest request,
+            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey) {
 
-        return service.makeDecision(id, request);
+        return service.makeDecision(id, request, idempotencyKey);
     }
 
     //  DECIDE
@@ -36,21 +37,21 @@ public class AdminController {
         return service.makeDecision(request);
     }
 
-    //  GET DECISION BY APPLICATION ID
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'APPLICANT')")
     @GetMapping("/decision/application/{appId}")
     public DecisionResponse getByApplication(@PathVariable Long appId) {
         return service.getByApplicationId(appId);
     }
 
     //  GET ALL DECISIONS
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/decisions")
     public List<DecisionResponse> getAll() {
         return service.getAll();
     }
 
     // GET DECISIONS BY STATUS
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/decisions/status/{status}")
     public List<DecisionResponse> getByStatus(@PathVariable String status) {
         return service.getByStatus(status);
@@ -74,24 +75,28 @@ public class AdminController {
     }
 
     // GET APPLICATION BY ID (Feign)
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/application/{id}")
     public Object getApplication(@PathVariable Long id) {
         return service.getApplication(id);
     }
 
     // GET ALL APPLICATIONS (Feign)
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/applications")
     public Object getAllApplications() {
         return service.getAllApplications();
     }
 
     // GET APPLICATIONS BY STATUS (Feign)
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/applications/status/{status}")
     public Object getApplicationsByStatus(@PathVariable String status) {
         return service.getApplicationsByStatus(status);
     }
 
     // ADMIN STATS
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/stats")
     public Map<String, Long> stats() {
         return service.getStats();

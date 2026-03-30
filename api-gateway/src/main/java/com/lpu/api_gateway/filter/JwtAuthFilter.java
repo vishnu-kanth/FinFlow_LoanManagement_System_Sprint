@@ -4,6 +4,7 @@ import com.lpu.api_gateway.security.JwtUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,10 @@ public class JwtAuthFilter implements GatewayFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
+
+        if (HttpMethod.OPTIONS.equals(request.getMethod())) {
+            return chain.filter(exchange);
+        }
 
         if (isPublicPath(path)) {
             return chain.filter(exchange);

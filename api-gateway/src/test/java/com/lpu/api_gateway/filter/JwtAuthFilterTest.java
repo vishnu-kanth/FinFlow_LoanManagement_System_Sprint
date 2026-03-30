@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
 import org.springframework.web.server.ServerWebExchange;
@@ -36,6 +37,22 @@ class JwtAuthFilterTest {
     void filterAllowsPublicSwaggerPathWithoutToken() {
         MockServerWebExchange exchange = MockServerWebExchange.from(
                 MockServerHttpRequest.get("/gateway/auth/v3/api-docs").build()
+        );
+        when(filterChain.filter(any(ServerWebExchange.class))).thenReturn(Mono.empty());
+
+        jwtAuthFilter.filter(exchange, filterChain).block();
+
+        verify(filterChain).filter(exchange);
+        assertThat(exchange.getResponse().getStatusCode()).isNull();
+    }
+
+    @Test
+    void filterAllowsCorsPreflightWithoutToken() {
+        MockServerWebExchange exchange = MockServerWebExchange.from(
+                MockServerHttpRequest.method(HttpMethod.OPTIONS, "/gateway/applications/1")
+                        .header(HttpHeaders.ORIGIN, "http://localhost:3000")
+                        .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "POST")
+                        .build()
         );
         when(filterChain.filter(any(ServerWebExchange.class))).thenReturn(Mono.empty());
 

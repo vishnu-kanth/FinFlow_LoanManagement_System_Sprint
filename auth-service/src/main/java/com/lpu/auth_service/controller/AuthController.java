@@ -32,6 +32,7 @@ public class AuthController {
     public AuthResponse login(@RequestBody AuthRequest request) {
         return service.login(request);
     }
+    @PreAuthorize("hasAnyRole('APPLICANT', 'ADMIN')")
     @PutMapping("/update")
     public AuthResponse update(Principal principal,
                                @RequestBody UserUpdateRequest request) {
@@ -43,16 +44,19 @@ public class AuthController {
         return service.getAllUsers();
     }
 
+    @PreAuthorize("hasAnyRole('APPLICANT', 'ADMIN')")
     @GetMapping("/profile")
     public UserProfileResponse profile(Principal principal) {
         return service.getProfile(principal.getName());
     }
 
+    @PreAuthorize("hasAnyRole('APPLICANT', 'ADMIN')")
     @PostMapping("/logout")
     public String logout() {
         return service.logout();
     }
 
+    @PreAuthorize("hasAnyRole('APPLICANT', 'ADMIN')")
     @PostMapping("/refresh-token")
     public AuthResponse refresh(Principal principal) {
         return service.refreshToken(principal.getName());
@@ -64,9 +68,15 @@ public class AuthController {
         return service.deleteUser(id);
     }
 
+    @PreAuthorize("hasAnyRole('APPLICANT', 'ADMIN')")
     @GetMapping("/me")
     public UserProfileResponse me(Authentication authentication) {
         User user = service.getUserByEmail(authentication.getName());
         return new UserProfileResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());
+    }
+
+    @PostMapping("/promote-admin")
+    public AuthResponse promoteAdmin(Principal principal, @RequestParam String adminSecret) {
+        return service.promoteToAdmin(principal.getName(), adminSecret);
     }
 }

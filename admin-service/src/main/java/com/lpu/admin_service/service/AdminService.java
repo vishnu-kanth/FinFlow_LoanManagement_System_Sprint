@@ -5,7 +5,9 @@ import com.lpu.admin_service.dto.DecisionRequest;
 import com.lpu.admin_service.dto.DecisionResponse;
 import com.lpu.admin_service.entity.Decision;
 import com.lpu.admin_service.exception.CustomException;
+import com.lpu.admin_service.messaging.DecisionEventPublisher;
 import com.lpu.admin_service.repository.DecisionRepository;
+import com.lpu.admin_service.idempotency.IdempotencyService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,35 +20,44 @@ public class AdminService {
 
     private final DecisionRepository repo;
     private final ApplicationClient client;
+    private final DecisionEventPublisher decisionEventPublisher;
+    private final IdempotencyService idempotencyService;
 
-    public AdminService(DecisionRepository repo, ApplicationClient client) {
+    public AdminService(DecisionRepository repo, ApplicationClient client, DecisionEventPublisher decisionEventPublisher, IdempotencyService idempotencyService) {
         this.repo = repo;
         this.client = client;
+        this.decisionEventPublisher = decisionEventPublisher;
+        this.idempotencyService = idempotencyService;
     }
 
-    public DecisionResponse makeDecision(Long appId, DecisionRequest request) {
+    public DecisionResponse makeDecision(Long appId, DecisionRequest request, String idempotencyKey) {
+        return idempotencyService.executeIdempotent(idempotencyKey, () -> {
+            validateDecision(request.getDecision());
 
-        validateDecision(request.getDecision());
+            // Check application exists
+            client.getApplication(appId);
 
-        // Check application exists
-        client.getApplication(appId);
+            // Prevent duplicate decision
+            if (repo.existsByApplicationId(appId)) {
+                throw new CustomException("Decision already exists for this application");
+            }
 
-        // Prevent duplicate decision
-        if (repo.existsByApplicationId(appId)) {
-            throw new CustomException("Decision already exists for this application");
-        }
+            Decision d = new Decision();
+            d.setApplicationId(appId);
+            d.setDecision(request.getDecision().toUpperCase());
+            d.setRemarks(request.getRemarks());
+            d.setDecidedAt(LocalDateTime.now());
 
-        Decision d = new Decision();
-        d.setApplicationId(appId);
-        d.setDecision(request.getDecision().toUpperCase());
-        d.setRemarks(request.getRemarks());
-        d.setDecidedAt(LocalDateTime.now());
+            repo.save(d);
 
-        repo.save(d);
+            // Publish async event to RabbitMQ
+            decisionEventPublisher.publishDecisionMade(
+                    appId, d.getDecision(), d.getRemarks(), "admin"
+            );
 
-        return mapToResponse(d);
+            return mapToResponse(d);
+        }, DecisionResponse.class);
     }
-
 
     public DecisionResponse makeDecision(DecisionRequest request) {
 
@@ -54,7 +65,7 @@ public class AdminService {
             throw new CustomException("Application ID is required");
         }
 
-        return makeDecision(request.getApplicationId(), request);
+        return makeDecision(request.getApplicationId(), request, null);
     }
     public DecisionResponse getByApplicationId(Long appId) {
 

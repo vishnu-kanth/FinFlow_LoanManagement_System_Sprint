@@ -21,6 +21,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -84,25 +85,83 @@ class AuthServiceTest {
     }
 
     @Test
-    void updateEncodesPasswordBeforeSaving() {
+    void registerThrowsWhenEmailExists() {
+        AuthRequest request = new AuthRequest();
+        request.setName("Exists");
+        request.setEmail("exists@example.com");
+        request.setPassword("password");
+
+        when(repository.existsByEmail("exists@example.com")).thenReturn(true);
+
+        assertThatThrownBy(() -> authService.register(request))
+                .isInstanceOf(CustomException.class)
+                .hasMessage("Email is already registered");
+    }
+
+    @Test
+    void loginReturnsTokenOnSuccess() {
+        AuthRequest request = new AuthRequest();
+        request.setEmail("user@example.com");
+        request.setPassword("password");
+
         User user = new User();
-        user.setId(3L);
         user.setEmail("user@example.com");
-        user.setRole("ROLE_APPLICANT");
-        user.setPassword("old");
+
+        when(repository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+        when(jwtService.generateToken(user)).thenReturn("valid-token");
+
+        AuthResponse response = authService.login(request);
+
+        verify(authenticationManager).authenticate(any());
+        assertThat(response.getToken()).isEqualTo("valid-token");
+        assertThat(response.getEmail()).isEqualTo("user@example.com");
+    }
+
+    @Test
+    void deleteUserRemovesRecord() {
+        String result = authService.deleteUser(1L);
+        verify(repository).deleteById(1L);
+        assertThat(result).isEqualTo("User deleted successfully");
+    }
+
+    @Test
+    void getProfileThrowsWhenUserNotFound() {
+        when(repository.findByEmail("none@example.com")).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> authService.getProfile("none@example.com"))
+                .isInstanceOf(CustomException.class)
+                .hasMessage("User not found");
+    }
+
+    @Test
+    void updateModifiesOnlyName() {
+        User user = new User();
+        user.setEmail("user@example.com");
+        user.setName("OldName");
 
         UserUpdateRequest request = new UserUpdateRequest();
-        request.setName("Updated");
+        request.setName("NewName");
+
+        when(repository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
+
+        authService.update("user@example.com", request);
+
+        assertThat(user.getName()).isEqualTo("NewName");
+        verify(passwordEncoder, never()).encode(any());
+    }
+
+    @Test
+    void updateEncodesPasswordBeforeSaving() {
+        User user = new User();
+        user.setEmail("user@example.com");
+
+        UserUpdateRequest request = new UserUpdateRequest();
         request.setPassword("new-password");
 
         when(repository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.encode("new-password")).thenReturn("encoded-new-password");
 
-        AuthResponse response = authService.update("user@example.com", request);
+        authService.update("user@example.com", request);
 
-        verify(repository).save(user);
-        assertThat(user.getName()).isEqualTo("Updated");
         assertThat(user.getPassword()).isEqualTo("encoded-new-password");
-        assertThat(response.getEmail()).isEqualTo("user@example.com");
     }
 }

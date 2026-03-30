@@ -34,7 +34,7 @@ public class JwtService {
                 .compact();
     }
 
-    // Extract Username (Email)
+    // Extract Username
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -42,6 +42,11 @@ public class JwtService {
     // Extract Role
     public String extractRole(String token) {
         return extractClaim(token, claims -> claims.get("role", String.class));
+    }
+
+    // Extract UserID
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
 
     // Generic Claim Extractor

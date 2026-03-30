@@ -20,43 +20,67 @@ public class ApplicationController {
         this.service = service;
     }
 
+    private Long getUserId(String userIdHeader, Long attributeUserId) {
+        if (userIdHeader != null && !userIdHeader.isBlank()) {
+            return Long.valueOf(userIdHeader);
+        }
+        if (attributeUserId != null) {
+            return attributeUserId;
+        }
+        throw new RuntimeException("Missing User ID context. Use Gateway or provide Authorization header.");
+    }
+
     // 1. CREATE APPLICATION (APPLICANT)
     @PreAuthorize("hasRole('APPLICANT')")
     @PostMapping
-    public ApplicationResponse create(@RequestBody ApplicationRequest request, @RequestHeader("X-User-Id") String userIdHeader) {
-        Long userId = Long.valueOf(userIdHeader);
-        return service.create(request, userId);
+    public ApplicationResponse create(
+            @RequestBody ApplicationRequest request,
+            @RequestHeader(value = "X-User-Id", required = false) String userIdHeader,
+            @RequestAttribute(value = "authenticatedUserId", required = false) Long attributeUserId,
+            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey) {
+        Long userId = getUserId(userIdHeader, attributeUserId);
+        return service.create(request, userId, idempotencyKey);
     }
 
     // 2. UPDATE APPLICATION (APPLICANT)
     @PreAuthorize("hasRole('APPLICANT')")
     @PutMapping("/{id}")
-    public ApplicationResponse update(@PathVariable Long id, @RequestBody LoanApplicationUpdateDTO dto, @RequestHeader("X-User-Id") String userIdHeader) {
-        Long userId = Long.valueOf(userIdHeader);
+    public ApplicationResponse update(@PathVariable Long id, 
+                                      @RequestBody LoanApplicationUpdateDTO dto, 
+                                      @RequestHeader(value = "X-User-Id", required = false) String userIdHeader,
+                                      @RequestAttribute(value = "authenticatedUserId", required = false) Long attributeUserId) {
+        Long userId = getUserId(userIdHeader, attributeUserId);
         return service.update(id, dto, userId);
     }
 
     // 3. SUBMIT APPLICATION (APPLICANT)
     @PreAuthorize("hasRole('APPLICANT')")
     @PatchMapping("/{id}/submit")
-    public ApplicationResponse submit(@PathVariable Long id, @RequestHeader("X-User-Id") String userIdHeader) {
-        Long userId = Long.valueOf(userIdHeader);
+    public ApplicationResponse submit(@PathVariable Long id, 
+                                      @RequestHeader(value = "X-User-Id", required = false) String userIdHeader,
+                                      @RequestAttribute(value = "authenticatedUserId", required = false) Long attributeUserId) {
+        Long userId = getUserId(userIdHeader, attributeUserId);
         return service.submit(id, userId);
     }
 
     // 4. CANCEL APPLICATION (APPLICANT)
     @PreAuthorize("hasRole('APPLICANT')")
     @PatchMapping("/{id}/cancel")
-    public ApplicationResponse cancel(@PathVariable Long id, @RequestHeader("X-User-Id") String userIdHeader) {
-        Long userId = Long.valueOf(userIdHeader);
+    public ApplicationResponse cancel(@PathVariable Long id, 
+                                      @RequestHeader(value = "X-User-Id", required = false) String userIdHeader,
+                                      @RequestAttribute(value = "authenticatedUserId", required = false) Long attributeUserId) {
+        Long userId = getUserId(userIdHeader, attributeUserId);
         return service.cancel(id, userId);
     }
 
     // 5. GET BY ID (APPLICANT - own, ADMIN - all)
     @PreAuthorize("hasAnyRole('APPLICANT', 'ADMIN')")
     @GetMapping("/{id}")
-    public ApplicationDetailResponse get(@PathVariable Long id, @RequestHeader("X-User-Id") String userIdHeader, Authentication auth) {
-        Long userId = Long.valueOf(userIdHeader);
+    public ApplicationDetailResponse get(@PathVariable Long id, 
+                                         @RequestHeader(value = "X-User-Id", required = false) String userIdHeader, 
+                                         @RequestAttribute(value = "authenticatedUserId", required = false) Long attributeUserId,
+                                         Authentication auth) {
+        Long userId = getUserId(userIdHeader, attributeUserId);
         String role = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
@@ -74,8 +98,11 @@ public class ApplicationController {
     // 7. GET BY USER (APPLICANT - self, ADMIN - all)
     @PreAuthorize("hasAnyRole('APPLICANT', 'ADMIN')")
     @GetMapping("/user/{userId}")
-    public List<ApplicationDetailResponse> getByUser(@PathVariable Long userId, @RequestHeader("X-User-Id") String userIdHeader, Authentication auth) {
-        Long requesterId = Long.valueOf(userIdHeader);
+    public List<ApplicationDetailResponse> getByUser(@PathVariable Long userId, 
+                                                     @RequestHeader(value = "X-User-Id", required = false) String userIdHeader, 
+                                                     @RequestAttribute(value = "authenticatedUserId", required = false) Long attributeUserId,
+                                                     Authentication auth) {
+        Long requesterId = getUserId(userIdHeader, attributeUserId);
         String role = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()

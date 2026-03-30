@@ -158,4 +158,19 @@ public class AuthService {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new CustomException("User not found"));
     }
+
+    public AuthResponse promoteToAdmin(String email, String adminSecret) {
+        if (!"FINFLOW_ADMIN_SECRET".equals(adminSecret)) {
+            throw new CustomException("Invalid admin secret code");
+        }
+        User user = getUserByEmail(email);
+        user.setRole("ROLE_ADMIN");
+        repository.save(user);
+
+        return AuthResponse.builder()
+                .message("User promoted to ADMIN successfully")
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+    }
 }

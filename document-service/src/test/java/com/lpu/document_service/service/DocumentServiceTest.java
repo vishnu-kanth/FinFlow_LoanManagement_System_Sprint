@@ -85,4 +85,81 @@ class DocumentServiceTest {
         assertThat(Files.exists(storedFile)).isFalse();
         assertThat(response).isEqualTo("Document deleted successfully");
     }
+
+    @Test
+    void getByIdReturnsDocument() {
+        Document doc = new Document();
+        doc.setId(10L);
+        when(repository.findById(10L)).thenReturn(Optional.of(doc));
+        Document result = documentService.getById(10L);
+        assertThat(result.getId()).isEqualTo(10L);
+    }
+
+    @Test
+    void getByApplicationIdReturnsList() {
+        Document doc1 = new Document();
+        doc1.setApplicationId(100L);
+        when(repository.findByApplicationId(100L)).thenReturn(java.util.List.of(doc1));
+        var list = documentService.getByApplicationId(100L);
+        assertThat(list).hasSize(1);
+    }
+
+    @Test
+    void verifyUpdatesStatusAndTimestamp() {
+        Document doc = new Document();
+        doc.setId(1L);
+        doc.setStatus("PENDING");
+        when(repository.findById(1L)).thenReturn(Optional.of(doc));
+        when(repository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        String result = documentService.verify(1L);
+
+        assertThat(doc.getStatus()).isEqualTo("VERIFIED");
+        assertThat(doc.getVerifiedAt()).isNotNull();
+        assertThat(result).isEqualTo("Document verified successfully");
+    }
+
+    @Test
+    void getVerifiedReturnsOnlyVerified() {
+        Document doc = new Document();
+        doc.setStatus("VERIFIED");
+        when(repository.findByStatus("VERIFIED")).thenReturn(java.util.List.of(doc));
+        var list = documentService.getVerified();
+        assertThat(list).hasSize(1);
+        assertThat(list.get(0).getStatus()).isEqualTo("VERIFIED");
+    }
+
+    @Test
+    void getByTypeReturnsMatchingDocuments() {
+        Document doc = new Document();
+        doc.setFileType("application/pdf");
+        when(repository.findByFileType("application/pdf")).thenReturn(java.util.List.of(doc));
+        var list = documentService.getByType("application/pdf");
+        assertThat(list).hasSize(1);
+    }
+
+    @Test
+    void getPendingReturnsOnlyPending() {
+        Document doc = new Document();
+        doc.setStatus("PENDING");
+        when(repository.findByStatus("PENDING")).thenReturn(java.util.List.of(doc));
+        var list = documentService.getPending();
+        assertThat(list).hasSize(1);
+        assertThat(list.get(0).getStatus()).isEqualTo("PENDING");
+    }
+
+    @Test
+    void deleteThrowsWhenDocumentNotFound() {
+        when(repository.findById(999L)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> documentService.delete(999L))
+                .isInstanceOf(CustomException.class)
+                .hasMessage("Document not found");
+    }
+
+    @Test
+    void getAllReturnsEmptyListWhenNoDocuments() {
+        when(repository.findAll()).thenReturn(java.util.Collections.emptyList());
+        var list = documentService.getAll();
+        assertThat(list).isEmpty();
+    }
 }

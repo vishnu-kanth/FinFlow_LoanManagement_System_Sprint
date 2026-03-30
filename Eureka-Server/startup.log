@@ -1,0 +1,244 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.0.4)
+
+2026-03-29T22:15:34.238+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.l.E.EurekaServerApplication            : Starting EurekaServerApplication v0.0.1-SNAPSHOT using Java 25.0.1 with PID 37324 (C:\Users\HP\OneDrive\Desktop\FinFlow\Eureka-Server\target\Eureka-Server-0.0.1-SNAPSHOT.jar started by HP in C:\Users\HP\OneDrive\Desktop\FinFlow\Eureka-Server)
+2026-03-29T22:15:34.244+05:30 DEBUG 37324 --- [EUREKA-SERVER] [           main] c.l.E.EurekaServerApplication            : Running with Spring Boot v4.0.4, Spring v7.0.6
+2026-03-29T22:15:34.248+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.l.E.EurekaServerApplication            : No active profile set, falling back to 1 default profile: "default"
+2026-03-29T22:15:34.347+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2026-03-29T22:15:34.348+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.c.c.c.ConfigServerConfigDataLoader   : Located environment: name=EUREKA-SERVER, profiles=[default], label=main, version=5202c7a1c20f42bb2d8c40821151c27dd967c92d, state=
+2026-03-29T22:15:37.545+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=b592cb02-43f0-3dc5-8636-f016cf35e41b
+2026-03-29T22:15:38.278+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8761 (http)
+2026-03-29T22:15:38.318+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-29T22:15:38.319+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.18]
+2026-03-29T22:15:38.398+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 4045 ms
+2026-03-29T22:15:40.684+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-03-29T22:15:40.685+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-03-29T22:15:41.123+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-03-29T22:15:41.124+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-03-29T22:15:41.450+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-03-29T22:15:43.298+05:30  WARN 37324 --- [EUREKA-SERVER] [           main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-03-29T22:15:43.348+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-03-29T22:15:43.386+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-03-29T22:15:43.387+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] com.netflix.discovery.DiscoveryClient    : Client configured to neither register nor query for data.
+2026-03-29T22:15:43.390+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1774802743389 with initial instances count: 0
+2026-03-29T22:15:43.475+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.eureka.DefaultEurekaServerContext    : Initializing ...
+2026-03-29T22:15:43.478+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.eureka.cluster.PeerEurekaNodes       : Adding new peer nodes [http://localhost:8761/eureka/]
+2026-03-29T22:15:43.798+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON encoding codec LegacyJacksonJson
+2026-03-29T22:15:43.799+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using JSON decoding codec LegacyJacksonJson
+2026-03-29T22:15:43.800+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML encoding codec XStreamXml
+2026-03-29T22:15:43.800+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.d.provider.DiscoveryJerseyProvider   : Using XML decoding codec XStreamXml
+2026-03-29T22:15:43.867+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.eureka.cluster.PeerEurekaNodes       : Replica node URL:  http://localhost:8761/eureka/
+2026-03-29T22:15:43.890+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.e.registry.AbstractInstanceRegistry  : Finished initializing remote region registries. All known remote regions: []
+2026-03-29T22:15:43.891+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.n.eureka.DefaultEurekaServerContext    : Initialized
+2026-03-29T22:15:43.912+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 16 endpoints beneath base path '/actuator'
+2026-03-29T22:15:44.038+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application EUREKA-SERVER with eureka with status UP
+2026-03-29T22:15:44.061+05:30  INFO 37324 --- [EUREKA-SERVER] [       Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : isAws returned false
+2026-03-29T22:15:44.065+05:30  INFO 37324 --- [EUREKA-SERVER] [       Thread-9] o.s.c.n.e.server.EurekaServerBootstrap   : Initialized server context
+2026-03-29T22:15:44.066+05:30  INFO 37324 --- [EUREKA-SERVER] [       Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Got 1 instances from neighboring DS node
+2026-03-29T22:15:44.067+05:30  INFO 37324 --- [EUREKA-SERVER] [       Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Renew threshold is: 1
+2026-03-29T22:15:44.068+05:30  INFO 37324 --- [EUREKA-SERVER] [       Thread-9] c.n.e.r.PeerAwareInstanceRegistryImpl    : Changing status to UP
+2026-03-29T22:15:44.073+05:30  INFO 37324 --- [EUREKA-SERVER] [       Thread-9] e.s.EurekaServerInitializerConfiguration : Started Eureka Server
+2026-03-29T22:15:44.089+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8761 (http) with context path '/'
+2026-03-29T22:15:44.090+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8761
+2026-03-29T22:15:44.120+05:30  INFO 37324 --- [EUREKA-SERVER] [           main] c.l.E.EurekaServerApplication            : Started EurekaServerApplication in 14.107 seconds (process running for 15.404)
+2026-03-29T22:15:48.168+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-29T22:15:48.169+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-29T22:15:48.172+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-03-29T22:15:52.903+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: lease doesn't exist, registering resource: AUTH-SERVICE - Vishnu:AUTH-SERVICE:8084
+2026-03-29T22:15:52.904+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.eureka.resources.InstanceResource    : Not Found (Renew): AUTH-SERVICE - Vishnu:AUTH-SERVICE:8084
+2026-03-29T22:15:53.112+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status UP (replication=false)
+2026-03-29T22:15:53.112+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-4] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status UP (replication=false)
+2026-03-29T22:15:53.965+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status UP (replication=true)
+2026-03-29T22:16:11.669+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-4] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: lease doesn't exist, registering resource: EUREKA-SERVER - Vishnu:EUREKA-SERVER
+2026-03-29T22:16:11.670+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-4] c.n.eureka.resources.InstanceResource    : Not Found (Renew): EUREKA-SERVER - Vishnu:EUREKA-SERVER
+2026-03-29T22:16:12.243+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance EUREKA-SERVER/Vishnu:EUREKA-SERVER with status UP (replication=false)
+2026-03-29T22:16:12.756+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : Registered instance EUREKA-SERVER/Vishnu:EUREKA-SERVER with status UP (replication=true)
+2026-03-29T22:16:44.070+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:17:44.082+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 11ms
+2026-03-29T22:18:44.086+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 3ms
+2026-03-29T22:19:44.089+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 3ms
+2026-03-29T22:20:44.097+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 8ms
+2026-03-29T22:21:44.097+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:22:44.228+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 129ms
+2026-03-29T22:23:44.228+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 1ms
+2026-03-29T22:24:44.228+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:25:44.228+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:26:44.228+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:27:15.325+05:30  INFO 37324 --- [EUREKA-SERVER] [io-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance EUREKA-SERVER/Vishnu:EUREKA-SERVER with status DOWN (replication=false)
+2026-03-29T22:27:15.845+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance EUREKA-SERVER/Vishnu:EUREKA-SERVER with status DOWN (replication=true)
+2026-03-29T22:27:18.592+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance EUREKA-SERVER/Vishnu:EUREKA-SERVER (replication=false)
+2026-03-29T22:27:19.192+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: EUREKA-SERVER/Vishnu:EUREKA-SERVER
+2026-03-29T22:27:19.193+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): EUREKA-SERVER - Vishnu:EUREKA-SERVER
+2026-03-29T22:27:19.196+05:30  WARN 37324 --- [EUREKA-SERVER] [et_localhost-14] c.n.eureka.cluster.ReplicationTask       : The replication of task EUREKA-SERVER/Vishnu:EUREKA-SERVER:Cancel@localhost failed with response code 404
+2026-03-29T22:27:19.197+05:30  WARN 37324 --- [EUREKA-SERVER] [et_localhost-14] c.netflix.eureka.cluster.PeerEurekaNode  : EUREKA-SERVER/Vishnu:EUREKA-SERVER:Cancel@localhost: missing entry.
+2026-03-29T22:27:35.703+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status UP (replication=false)
+2026-03-29T22:27:35.900+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status UP (replication=true)
+2026-03-29T22:27:38.213+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-8] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status DOWN (replication=false)
+2026-03-29T22:27:38.730+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status DOWN (replication=true)
+2026-03-29T22:27:44.229+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:27:50.769+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : Registered instance DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083 with status UP (replication=false)
+2026-03-29T22:27:51.292+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Registered instance DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083 with status UP (replication=true)
+2026-03-29T22:27:52.416+05:30  INFO 37324 --- [EUREKA-SERVER] [io-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status DOWN (replication=false)
+2026-03-29T22:27:52.427+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status DOWN (replication=false)
+2026-03-29T22:27:52.439+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 (replication=false)
+2026-03-29T22:27:52.947+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status DOWN (replication=true)
+2026-03-29T22:27:52.948+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 (replication=true)
+2026-03-29T22:27:55.410+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: lease doesn't exist, registering resource: AUTH-SERVICE - Vishnu:AUTH-SERVICE:8084
+2026-03-29T22:27:55.410+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.eureka.resources.InstanceResource    : Not Found (Renew): AUTH-SERVICE - Vishnu:AUTH-SERVICE:8084
+2026-03-29T22:27:55.636+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status UP (replication=false)
+2026-03-29T22:27:56.150+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status UP (replication=true)
+2026-03-29T22:27:56.506+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082 with status UP (replication=false)
+2026-03-29T22:27:57.041+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082 with status UP (replication=true)
+2026-03-29T22:27:59.270+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : Registered instance ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085 with status UP (replication=false)
+2026-03-29T22:27:59.785+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : Registered instance ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085 with status UP (replication=true)
+2026-03-29T22:28:28.933+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-4] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status UP (replication=false)
+2026-03-29T22:28:29.453+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status UP (replication=true)
+2026-03-29T22:28:31.257+05:30  INFO 37324 --- [EUREKA-SERVER] [io-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status DOWN (replication=false)
+2026-03-29T22:28:31.797+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status DOWN (replication=true)
+2026-03-29T22:28:44.259+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 30ms
+2026-03-29T22:29:01.826+05:30 ERROR 37324 --- [EUREKA-SERVER] [et_localhost-13] c.n.e.cluster.ReplicationTaskProcessor   : It seems to be a socket read timeout exception, it will retry later. if it continues to happen and some eureka node occupied all the cpu time, you should set property 'eureka.server.peer-node-read-timeout-ms' to a bigger value
+
+jakarta.ws.rs.ProcessingException: java.net.SocketTimeoutException: Read timed out
+	at org.glassfish.jersey.apache.connector.ApacheConnector.apply(ApacheConnector.java:535) ~[jersey-apache-connector-3.0.5.jar!/:na]
+	at org.glassfish.jersey.client.ClientRuntime.invoke(ClientRuntime.java:300) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.lambda$invoke$0(JerseyInvocation.java:671) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.call(JerseyInvocation.java:706) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.lambda$runInScope$3(JerseyInvocation.java:700) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:292) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:274) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:205) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:391) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.runInScope(JerseyInvocation.java:700) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.invoke(JerseyInvocation.java:670) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.method(JerseyInvocation.java:436) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.post(JerseyInvocation.java:342) ~[jersey-client-4.0.2.jar!/:na]
+	at com.netflix.eureka.transport.Jersey3ReplicationClient.submitBatchUpdates(Jersey3ReplicationClient.java:116) ~[eureka-core-jersey3-2.0.5.jar!/:2.0.5]
+	at com.netflix.eureka.cluster.ReplicationTaskProcessor.process(ReplicationTaskProcessor.java:80) ~[eureka-core-2.0.5.jar!/:2.0.5]
+	at com.netflix.eureka.util.batcher.TaskExecutors$BatchWorkerRunnable.run(TaskExecutors.java:178) ~[eureka-core-2.0.5.jar!/:2.0.5]
+	at java.base/java.lang.Thread.run(Thread.java:1474) ~[na:na]
+Caused by: java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:277) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:302) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:354) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:798) ~[na:na]
+	at java.base/java.net.Socket$SocketInputStream.implRead(Socket.java:974) ~[na:na]
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:964) ~[na:na]
+	at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.io.SessionInputBufferImpl.fillBuffer(SessionInputBufferImpl.java:153) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.io.SessionInputBufferImpl.readLine(SessionInputBufferImpl.java:280) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.conn.DefaultHttpResponseParser.parseHead(DefaultHttpResponseParser.java:138) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.conn.DefaultHttpResponseParser.parseHead(DefaultHttpResponseParser.java:56) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.io.AbstractMessageParser.parse(AbstractMessageParser.java:259) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.DefaultBHttpClientConnection.receiveResponseHeader(DefaultBHttpClientConnection.java:163) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.conn.CPoolProxy.receiveResponseHeader(CPoolProxy.java:165) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.protocol.HttpRequestExecutor.doReceiveResponse(HttpRequestExecutor.java:273) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.protocol.HttpRequestExecutor.execute(HttpRequestExecutor.java:125) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:272) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:185) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:111) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:72) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.glassfish.jersey.apache.connector.ApacheConnector.apply(ApacheConnector.java:487) ~[jersey-apache-connector-3.0.5.jar!/:na]
+	... 16 common frames omitted
+
+2026-03-29T22:29:34.433+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083 with status DOWN (replication=false)
+2026-03-29T22:29:34.973+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083 with status DOWN (replication=true)
+2026-03-29T22:29:39.569+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083 (replication=false)
+2026-03-29T22:29:40.089+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083
+2026-03-29T22:29:40.092+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): DOCUMENT-SERVICE - Vishnu:DOCUMENT-SERVICE:8083
+2026-03-29T22:29:40.096+05:30  WARN 37324 --- [EUREKA-SERVER] [et_localhost-15] c.n.eureka.cluster.ReplicationTask       : The replication of task DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083:Cancel@localhost failed with response code 404
+2026-03-29T22:29:40.098+05:30  WARN 37324 --- [EUREKA-SERVER] [et_localhost-15] c.netflix.eureka.cluster.PeerEurekaNode  : DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083:Cancel@localhost: missing entry.
+2026-03-29T22:29:43.028+05:30  INFO 37324 --- [EUREKA-SERVER] [io-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085 with status DOWN (replication=false)
+2026-03-29T22:29:43.548+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-8] c.n.e.registry.AbstractInstanceRegistry  : Registered instance ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085 with status DOWN (replication=true)
+2026-03-29T22:29:44.259+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:29:44.261+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Evicting 1 items (expired=1, evictionLimit=1)
+2026-03-29T22:29:44.264+05:30  WARN 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: expired lease for API-GATEWAY/Vishnu:API-GATEWAY:9000
+2026-03-29T22:29:44.265+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance API-GATEWAY/Vishnu:API-GATEWAY:9000 (replication=false)
+2026-03-29T22:29:47.402+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085 (replication=false)
+2026-03-29T22:29:47.919+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085
+2026-03-29T22:29:47.919+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-9] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): ADMIN-SERVICE - Vishnu:ADMIN-SERVICE:8085
+2026-03-29T22:29:47.922+05:30  WARN 37324 --- [EUREKA-SERVER] [get_localhost-9] c.n.eureka.cluster.ReplicationTask       : The replication of task ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085:Cancel@localhost failed with response code 404
+2026-03-29T22:29:47.923+05:30  WARN 37324 --- [EUREKA-SERVER] [get_localhost-9] c.netflix.eureka.cluster.PeerEurekaNode  : ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085:Cancel@localhost: missing entry.
+2026-03-29T22:29:50.127+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082 with status DOWN (replication=false)
+2026-03-29T22:29:50.641+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082 with status DOWN (replication=true)
+2026-03-29T22:29:54.573+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082 (replication=false)
+2026-03-29T22:29:55.086+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: cancel failed because Lease is not registered for: APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082
+2026-03-29T22:29:55.091+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-7] c.n.eureka.resources.InstanceResource    : Not Found (Cancel): APPLICATION-SERVICE - Vishnu:APPLICATION-SERVICE:8082
+2026-03-29T22:29:55.097+05:30  WARN 37324 --- [EUREKA-SERVER] [et_localhost-15] c.n.eureka.cluster.ReplicationTask       : The replication of task APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082:Cancel@localhost failed with response code 404
+2026-03-29T22:29:55.099+05:30  WARN 37324 --- [EUREKA-SERVER] [et_localhost-15] c.netflix.eureka.cluster.PeerEurekaNode  : APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082:Cancel@localhost: missing entry.
+2026-03-29T22:30:44.111+05:30  INFO 37324 --- [EUREKA-SERVER] [hresholdUpdater] c.n.e.r.PeerAwareInstanceRegistryImpl    : Current renewal threshold is : 3
+2026-03-29T22:30:44.259+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:30:47.253+05:30 ERROR 37324 --- [EUREKA-SERVER] [get_localhost-1] c.n.e.cluster.ReplicationTaskProcessor   : It seems to be a socket read timeout exception, it will retry later. if it continues to happen and some eureka node occupied all the cpu time, you should set property 'eureka.server.peer-node-read-timeout-ms' to a bigger value
+
+jakarta.ws.rs.ProcessingException: java.net.SocketTimeoutException: Read timed out
+	at org.glassfish.jersey.apache.connector.ApacheConnector.apply(ApacheConnector.java:535) ~[jersey-apache-connector-3.0.5.jar!/:na]
+	at org.glassfish.jersey.client.ClientRuntime.invoke(ClientRuntime.java:300) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.lambda$invoke$0(JerseyInvocation.java:671) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.call(JerseyInvocation.java:706) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.lambda$runInScope$3(JerseyInvocation.java:700) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:292) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:274) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.internal.Errors.process(Errors.java:205) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:391) ~[jersey-common-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.runInScope(JerseyInvocation.java:700) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation.invoke(JerseyInvocation.java:670) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.method(JerseyInvocation.java:436) ~[jersey-client-4.0.2.jar!/:na]
+	at org.glassfish.jersey.client.JerseyInvocation$Builder.post(JerseyInvocation.java:342) ~[jersey-client-4.0.2.jar!/:na]
+	at com.netflix.eureka.transport.Jersey3ReplicationClient.submitBatchUpdates(Jersey3ReplicationClient.java:116) ~[eureka-core-jersey3-2.0.5.jar!/:2.0.5]
+	at com.netflix.eureka.cluster.ReplicationTaskProcessor.process(ReplicationTaskProcessor.java:80) ~[eureka-core-2.0.5.jar!/:2.0.5]
+	at com.netflix.eureka.util.batcher.TaskExecutors$BatchWorkerRunnable.run(TaskExecutors.java:178) ~[eureka-core-2.0.5.jar!/:2.0.5]
+	at java.base/java.lang.Thread.run(Thread.java:1474) ~[na:na]
+Caused by: java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:277) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:302) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:354) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:798) ~[na:na]
+	at java.base/java.net.Socket$SocketInputStream.implRead(Socket.java:974) ~[na:na]
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:964) ~[na:na]
+	at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.io.SessionInputBufferImpl.fillBuffer(SessionInputBufferImpl.java:153) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.io.SessionInputBufferImpl.readLine(SessionInputBufferImpl.java:280) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.conn.DefaultHttpResponseParser.parseHead(DefaultHttpResponseParser.java:138) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.conn.DefaultHttpResponseParser.parseHead(DefaultHttpResponseParser.java:56) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.io.AbstractMessageParser.parse(AbstractMessageParser.java:259) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.DefaultBHttpClientConnection.receiveResponseHeader(DefaultBHttpClientConnection.java:163) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.conn.CPoolProxy.receiveResponseHeader(CPoolProxy.java:165) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.protocol.HttpRequestExecutor.doReceiveResponse(HttpRequestExecutor.java:273) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.protocol.HttpRequestExecutor.execute(HttpRequestExecutor.java:125) ~[httpcore-4.4.16.jar!/:4.4.16]
+	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:272) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:185) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:111) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:72) ~[httpclient-4.5.3.jar!/:4.5.3]
+	at org.glassfish.jersey.apache.connector.ApacheConnector.apply(ApacheConnector.java:487) ~[jersey-apache-connector-3.0.5.jar!/:na]
+	... 16 common frames omitted
+
+2026-03-29T22:31:37.969+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status DOWN (replication=false)
+2026-03-29T22:31:38.042+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status DOWN (replication=false)
+2026-03-29T22:31:38.074+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-6] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 (replication=false)
+2026-03-29T22:31:38.701+05:30  INFO 37324 --- [EUREKA-SERVER] [io-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status DOWN (replication=true)
+2026-03-29T22:31:38.727+05:30  INFO 37324 --- [EUREKA-SERVER] [io-8761-exec-10] c.n.e.registry.AbstractInstanceRegistry  : Cancelled instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 (replication=true)
+2026-03-29T22:31:40.762+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : Registered instance APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082 with status UP (replication=false)
+2026-03-29T22:31:41.239+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-5] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status UP (replication=false)
+2026-03-29T22:31:41.292+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance APPLICATION-SERVICE/Vishnu:APPLICATION-SERVICE:8082 with status UP (replication=true)
+2026-03-29T22:31:41.294+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance API-GATEWAY/Vishnu:API-GATEWAY:9000 with status UP (replication=true)
+2026-03-29T22:31:42.070+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-7] c.n.e.registry.AbstractInstanceRegistry  : Registered instance DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083 with status UP (replication=false)
+2026-03-29T22:31:42.585+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-9] c.n.e.registry.AbstractInstanceRegistry  : Registered instance DOCUMENT-SERVICE/Vishnu:DOCUMENT-SERVICE:8083 with status UP (replication=true)
+2026-03-29T22:31:44.261+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 1ms
+2026-03-29T22:31:46.580+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.e.registry.AbstractInstanceRegistry  : DS: Registry: lease doesn't exist, registering resource: AUTH-SERVICE - Vishnu:AUTH-SERVICE:8084
+2026-03-29T22:31:46.581+05:30  WARN 37324 --- [EUREKA-SERVER] [nio-8761-exec-1] c.n.eureka.resources.InstanceResource    : Not Found (Renew): AUTH-SERVICE - Vishnu:AUTH-SERVICE:8084
+2026-03-29T22:31:46.848+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status UP (replication=false)
+2026-03-29T22:31:47.373+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-3] c.n.e.registry.AbstractInstanceRegistry  : Registered instance AUTH-SERVICE/Vishnu:AUTH-SERVICE:8084 with status UP (replication=true)
+2026-03-29T22:31:50.976+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-8] c.n.e.registry.AbstractInstanceRegistry  : Registered instance ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085 with status UP (replication=false)
+2026-03-29T22:31:51.175+05:30  INFO 37324 --- [EUREKA-SERVER] [nio-8761-exec-2] c.n.e.registry.AbstractInstanceRegistry  : Registered instance ADMIN-SERVICE/Vishnu:ADMIN-SERVICE:8085 with status UP (replication=true)
+2026-03-29T22:32:44.261+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 0ms
+2026-03-29T22:33:44.264+05:30  INFO 37324 --- [EUREKA-SERVER] [a-EvictionTimer] c.n.e.registry.AbstractInstanceRegistry  : Running the evict task with compensationTime 1ms

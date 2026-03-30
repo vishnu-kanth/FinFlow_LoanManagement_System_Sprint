@@ -1,0 +1,51 @@
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: finflow-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-273031}
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${DB_PASSWORD:-273031}"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: finflow-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: finflow-zipkin
+    ports:
+      - "9411:9411"
+    restart: unless-stopped
+
+
+volumes:
+  mysql_data:
+    driver: local
+  rabbitmq_data:
+    driver: local

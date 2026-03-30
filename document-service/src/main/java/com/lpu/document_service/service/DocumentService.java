@@ -3,6 +3,7 @@ package com.lpu.document_service.service;
 import com.lpu.document_service.entity.Document;
 import com.lpu.document_service.exception.CustomException;
 import com.lpu.document_service.repository.DocumentRepository;
+import com.lpu.document_service.idempotency.IdempotencyService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,40 +21,47 @@ public class DocumentService {
     private String uploadDir;
 
     private final DocumentRepository repository;
+    private final IdempotencyService idempotencyService;
 
-    public DocumentService(DocumentRepository repository) {
+    public DocumentService(DocumentRepository repository, IdempotencyService idempotencyService) {
         this.repository = repository;
+        this.idempotencyService = idempotencyService;
     }
 
 
-    public Document saveFile(Long applicationId, MultipartFile file) throws IOException {
+    public Document saveFile(Long applicationId, MultipartFile file, String idempotencyKey) throws IOException {
+        return idempotencyService.executeIdempotent(idempotencyKey, () -> {
+            try {
+                Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+                Files.createDirectories(uploadPath);
 
-        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
-        Files.createDirectories(uploadPath);
+                String originalFilename = file.getOriginalFilename();
+                if (originalFilename == null || originalFilename.isBlank()) {
+                    throw new CustomException("File must have a valid name");
+                }
 
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.isBlank()) {
-            throw new CustomException("File must have a valid name");
-        }
+                Path filePath = uploadPath.resolve(originalFilename).normalize();
 
-        Path filePath = uploadPath.resolve(originalFilename).normalize();
+                if (!filePath.startsWith(uploadPath)) {
+                    throw new CustomException("Invalid file path detected");
+                }
 
-        if (!filePath.startsWith(uploadPath)) {
-            throw new CustomException("Invalid file path detected");
-        }
+                File dest = filePath.toFile();
+                file.transferTo(dest);
 
-        File dest = filePath.toFile();
-        file.transferTo(dest);
+                Document doc = new Document();
+                doc.setApplicationId(applicationId);
+                doc.setFileName(originalFilename);
+                doc.setFileType(file.getContentType());
+                doc.setFilePath(filePath.toString());
+                doc.setStatus("PENDING");
+                doc.setUploadedAt(LocalDateTime.now());
 
-        Document doc = new Document();
-        doc.setApplicationId(applicationId);
-        doc.setFileName(originalFilename);
-        doc.setFileType(file.getContentType());
-        doc.setFilePath(filePath.toString());
-        doc.setStatus("PENDING");
-        doc.setUploadedAt(LocalDateTime.now());
-
-        return repository.save(doc);
+                return repository.save(doc);
+            } catch (IOException e) {
+                throw new CustomException("Failed to save file: " + e.getMessage());
+            }
+        }, Document.class);
     }
 
 

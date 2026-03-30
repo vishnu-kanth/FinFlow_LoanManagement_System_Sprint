@@ -3,7 +3,9 @@ package com.lpu.application_service.service;
 import com.lpu.application_service.dto.*;
 import com.lpu.application_service.entity.LoanApplication;
 import com.lpu.application_service.exception.CustomException;
+import com.lpu.application_service.messaging.ApplicationEventPublisher;
 import com.lpu.application_service.repository.LoanApplicationRepository;
+import com.lpu.application_service.idempotency.IdempotencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -15,26 +17,29 @@ import java.util.stream.Collectors;
 public class ApplicationService {
 
     private final LoanApplicationRepository repo;
-
+    private final ApplicationEventPublisher eventPublisher;
+    private final IdempotencyService idempotencyService;
     // CREATE APPLICATION
-    public ApplicationResponse create(ApplicationRequest request, Long userId) {
-        if (userId == null || request.getAmount() == null) {
-            throw new CustomException("UserId and Amount are required");
-        }
+    public ApplicationResponse create(ApplicationRequest request, Long userId, String idempotencyKey) {
+        return idempotencyService.executeIdempotent(idempotencyKey, () -> {
+            if (userId == null || request.getAmount() == null) {
+                throw new CustomException("UserId and Amount are required");
+            }
 
-        LoanApplication app = new LoanApplication();
-        app.setUserId(userId);
-        app.setAmount(request.getAmount());
-        app.setPurpose(request.getPurpose());
-        app.setTenure(request.getTenure());
-        app.setEmploymentType(request.getEmploymentType());
-        app.setMonthlyIncome(request.getMonthlyIncome());
-        app.setPanNumber(request.getPanNumber());
-        app.setStatus("DRAFT");
-        app.setCreatedAt(LocalDateTime.now());
+            LoanApplication app = new LoanApplication();
+            app.setUserId(userId);
+            app.setAmount(request.getAmount());
+            app.setPurpose(request.getPurpose());
+            app.setTenure(request.getTenure());
+            app.setEmploymentType(request.getEmploymentType());
+            app.setMonthlyIncome(request.getMonthlyIncome());
+            app.setPanNumber(request.getPanNumber());
+            app.setStatus("DRAFT");
+            app.setCreatedAt(LocalDateTime.now());
 
-        LoanApplication saved = repo.save(app);
-        return new ApplicationResponse(saved.getId(), saved.getStatus());
+            LoanApplication saved = repo.save(app);
+            return new ApplicationResponse(saved.getId(), saved.getStatus());
+        }, ApplicationResponse.class);
     }
 
     // UPDATE APPLICATION
@@ -78,6 +83,9 @@ public class ApplicationService {
         app.setSubmittedAt(LocalDateTime.now());
         repo.save(app);
 
+        // Publish async event
+        eventPublisher.publishApplicationSubmitted(app.getId(), app.getUserId());
+
         return new ApplicationResponse(app.getId(), app.getStatus());
     }
 
@@ -96,6 +104,9 @@ public class ApplicationService {
 
         app.setStatus("CANCELLED");
         repo.save(app);
+
+        // Publish async event
+        eventPublisher.publishApplicationCancelled(app.getId(), app.getUserId());
 
         return new ApplicationResponse(app.getId(), app.getStatus());
     }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import com.lpu.application_service.messaging.ApplicationEventPublisher;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -27,6 +28,9 @@ class ApplicationServiceTest {
 
     @Mock
     private LoanApplicationRepository repository;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private ApplicationService applicationService;
@@ -87,4 +91,113 @@ class ApplicationServiceTest {
                 .isInstanceOf(CustomException.class)
                 .hasMessage("Application is not in a state for review");
     }
+
+    @Test
+    void updateModifiesDraftApplication() {
+        LoanApplication application = new LoanApplication();
+        application.setId(100L);
+        application.setUserId(10L);
+        application.setStatus("DRAFT");
+
+        LoanApplicationUpdateDTO dto = new LoanApplicationUpdateDTO();
+        dto.setAmount(10000.0);
+        dto.setPurpose("Holiday");
+
+        when(repository.findById(100L)).thenReturn(Optional.of(application));
+
+        ApplicationResponse response = applicationService.update(100L, dto, 10L);
+
+        assertThat(application.getAmount()).isEqualTo(10000.0);
+        assertThat(application.getPurpose()).isEqualTo("Holiday");
+        assertThat(response.getStatus()).isEqualTo("DRAFT");
+    }
+
+    @Test
+    void updateThrowsWhenNotDraft() {
+        LoanApplication application = new LoanApplication();
+        application.setId(101L);
+        application.setUserId(11L);
+        application.setStatus("SUBMITTED");
+
+        when(repository.findById(101L)).thenReturn(Optional.of(application));
+
+        assertThatThrownBy(() -> applicationService.update(101L, new LoanApplicationUpdateDTO(), 11L))
+                .isInstanceOf(CustomException.class)
+                .hasMessage("Only DRAFT applications can be updated");
+    }
+
+    @Test
+    void cancelMarksAsCancelled() {
+        LoanApplication application = new LoanApplication();
+        application.setId(200L);
+        application.setUserId(20L);
+        application.setStatus("SUBMITTED");
+
+        when(repository.findById(200L)).thenReturn(Optional.of(application));
+
+        ApplicationResponse response = applicationService.cancel(200L, 20L);
+
+        assertThat(application.getStatus()).isEqualTo("CANCELLED");
+        assertThat(response.getStatus()).isEqualTo("CANCELLED");
+    }
+
+    @Test
+    void getByIdReturnsDetailResponse() {
+        LoanApplication application = new LoanApplication();
+        application.setId(300L);
+        application.setUserId(30L);
+        application.setStatus("APPROVED");
+
+        when(repository.findById(300L)).thenReturn(Optional.of(application));
+
+        var response = applicationService.getById(300L, 30L, "ROLE_APPLICANT");
+
+        assertThat(response.getId()).isEqualTo(300L);
+        assertThat(response.getStatus()).isEqualTo("APPROVED");
+    }
+
+    @Test
+    void getByStatusReturnsList() {
+        LoanApplication app1 = new LoanApplication();
+        app1.setStatus("SUBMITTED");
+        LoanApplication app2 = new LoanApplication();
+        app2.setStatus("SUBMITTED");
+
+        when(repository.findByStatus("SUBMITTED")).thenReturn(java.util.List.of(app1, app2));
+
+        var list = applicationService.getByStatus("SUBMITTED");
+
+        assertThat(list).hasSize(2);
+    }
+
+    @Test
+    void submitChangesStatusFromDraft() {
+        LoanApplication application = new LoanApplication();
+        application.setId(500L);
+        application.setUserId(50L);
+        application.setStatus("DRAFT");
+
+        when(repository.findById(500L)).thenReturn(Optional.of(application));
+        when(repository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        ApplicationResponse response = applicationService.submit(500L, 50L);
+
+        assertThat(application.getStatus()).isEqualTo("SUBMITTED");
+        assertThat(response.getStatus()).isEqualTo("SUBMITTED");
+    }
+
+    @Test
+    void submitThrowsWhenAlreadySubmitted() {
+        LoanApplication application = new LoanApplication();
+        application.setId(501L);
+        application.setUserId(51L);
+        application.setStatus("SUBMITTED");
+
+        when(repository.findById(501L)).thenReturn(Optional.of(application));
+
+        assertThatThrownBy(() -> applicationService.submit(501L, 51L))
+                .isInstanceOf(CustomException.class)
+                .hasMessage("Only DRAFT applications can be submitted");
+    }
+
 }
