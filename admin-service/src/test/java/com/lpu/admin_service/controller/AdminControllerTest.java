@@ -19,6 +19,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,7 +52,7 @@ class AdminControllerTest {
         response.setApplicationId(1L);
         response.setDecision("APPROVED");
 
-        when(adminService.makeDecision(eq(1L), any(DecisionRequest.class), any(String.class))).thenReturn(response);
+        when(adminService.makeDecision(eq(1L), any(DecisionRequest.class), isNull())).thenReturn(response);
 
         mockMvc.perform(post("/admin/applications/1/decision")
                         .contentType(MediaType.APPLICATION_JSON)

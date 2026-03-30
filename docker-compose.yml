@@ -3,24 +3,25 @@ services:
   mysql:
     image: mysql:8.4
     container_name: finflow-mysql
-    ports:
-      - "3306:3306"
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-273031}
       MYSQL_ROOT_HOST: "%"
+    ports:
+      - "3037:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${DB_PASSWORD:-273031}"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 10
       start_period: 30s
-    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: finflow-rabbitmq
+    restart: unless-stopped
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -31,21 +32,231 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 30s
+      interval: 15s
       timeout: 10s
-      retries: 5
-    restart: unless-stopped
+      retries: 10
+      start_period: 20s
 
   zipkin:
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:3.5.1
     container_name: finflow-zipkin
+    restart: unless-stopped
     ports:
       - "9411:9411"
-    restart: unless-stopped
 
+  config-server:
+    build:
+      context: ./config-server
+    container_name: finflow-config-server
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8888
+      CONFIG_REPO_PATH: file:/config-repo
+    volumes:
+      - ./FinFlow_Config_Server:/config-repo:ro
+    ports:
+      - "${CONFIG_SERVER_HOST_PORT:-8888}:8888"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8888/actuator/health >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  eureka-server:
+    build:
+      context: ./Eureka-Server
+    container_name: finflow-eureka-server
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8761
+      CONFIG_SERVER_URL: http://config-server:8888
+    ports:
+      - "${EUREKA_HOST_PORT:-18761}:8761"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8761/ >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  auth-service:
+    build:
+      context: ./auth-service
+    container_name: finflow-auth-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8084
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
+      DB_HOST: mysql
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-273031}
+    ports:
+      - "${AUTH_HOST_PORT:-18081}:8084"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8084/auth/v3/api-docs >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      zipkin:
+        condition: service_started
+
+  application-service:
+    build:
+      context: ./application-service
+    container_name: finflow-application-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8082
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
+      DB_HOST: mysql
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-273031}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    ports:
+      - "${APPLICATION_HOST_PORT:-18082}:8082"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8082/applications/v3/api-docs >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      zipkin:
+        condition: service_started
+
+  document-service:
+    build:
+      context: ./document-service
+    container_name: finflow-document-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8083
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
+      DB_HOST: mysql
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-273031}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+      FILE_UPLOAD_DIR: /app/uploads
+    volumes:
+      - ./uploads:/app/uploads
+    ports:
+      - "${DOCUMENT_HOST_PORT:-18083}:8083"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8083/documents/v3/api-docs >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      zipkin:
+        condition: service_started
+
+  admin-service:
+    build:
+      context: ./admin-service
+    container_name: finflow-admin-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8085
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
+      DB_HOST: mysql
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-273031}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    ports:
+      - "${ADMIN_HOST_PORT:-18084}:8085"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8085/admin/v3/api-docs >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      zipkin:
+        condition: service_started
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: finflow-api-gateway
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 9000
+      CONFIG_SERVER_URL: http://config-server:8888
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
+    ports:
+      - "${GATEWAY_HOST_PORT:-18080}:9000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:9000/actuator/health >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      application-service:
+        condition: service_healthy
+      document-service:
+        condition: service_healthy
+      admin-service:
+        condition: service_healthy
 
 volumes:
   mysql_data:
-    driver: local
   rabbitmq_data:
-    driver: local

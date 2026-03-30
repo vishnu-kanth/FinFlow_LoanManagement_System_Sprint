@@ -6,20 +6,23 @@ import com.lpu.application_service.dto.ApplicationResponse;
 import com.lpu.application_service.dto.LoanApplicationUpdateDTO;
 import com.lpu.application_service.entity.LoanApplication;
 import com.lpu.application_service.exception.CustomException;
+import com.lpu.application_service.idempotency.IdempotencyService;
+import com.lpu.application_service.messaging.ApplicationEventPublisher;
 import com.lpu.application_service.repository.LoanApplicationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import com.lpu.application_service.messaging.ApplicationEventPublisher;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,6 +34,9 @@ class ApplicationServiceTest {
 
     @Mock
     private ApplicationEventPublisher eventPublisher;
+
+    @Mock
+    private IdempotencyService idempotencyService;
 
     @InjectMocks
     private ApplicationService applicationService;
@@ -47,8 +53,10 @@ class ApplicationServiceTest {
             application.setId(1L);
             return application;
         });
+        when(idempotencyService.executeIdempotent(any(), any(), eq(ApplicationResponse.class)))
+                .thenAnswer(invocation -> invocation.<Supplier<ApplicationResponse>>getArgument(1).get());
 
-        ApplicationResponse response = applicationService.create(request, 7L);
+        ApplicationResponse response = applicationService.create(request, 7L, null);
 
         ArgumentCaptor<LoanApplication> captor = ArgumentCaptor.forClass(LoanApplication.class);
         verify(repository).save(captor.capture());

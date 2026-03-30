@@ -4,14 +4,8 @@ server:
 spring:
   application:
     name: CONFIG-SERVER
-  cloud:
-    config:
-      server:
-        git:
-          uri: ${CONFIG_REPO_URI:https://github.com/vishnu-kanth/FinFlow_Config_Server}
-          default-label: ${CONFIG_REPO_LABEL:main}
-          clone-on-start: true
-          force-pull: true
+  profiles:
+    default: native
 
 management:
   endpoints:
@@ -21,3 +15,30 @@ management:
   endpoint:
     health:
       show-details: always
+
+---
+spring:
+  config:
+    activate:
+      on-profile: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations:
+            - ${CONFIG_REPO_PATH:file:../FinFlow_Config_Server}
+            - file:./FinFlow_Config_Server
+
+---
+spring:
+  config:
+    activate:
+      on-profile: git
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CONFIG_REPO_URI:https://github.com/vishnu-kanth/FinFlow_Config_Server}
+          default-label: ${CONFIG_REPO_LABEL:main}
+          clone-on-start: true
+          force-pull: true

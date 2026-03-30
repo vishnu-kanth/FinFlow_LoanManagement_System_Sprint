@@ -2,6 +2,7 @@ package com.lpu.document_service.service;
 
 import com.lpu.document_service.entity.Document;
 import com.lpu.document_service.exception.CustomException;
+import com.lpu.document_service.idempotency.IdempotencyService;
 import com.lpu.document_service.repository.DocumentRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,10 +17,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,6 +31,9 @@ class DocumentServiceTest {
 
     @Mock
     private DocumentRepository repository;
+
+    @Mock
+    private IdempotencyService idempotencyService;
 
     @InjectMocks
     private DocumentService documentService;
@@ -46,8 +52,10 @@ class DocumentServiceTest {
         );
 
         when(repository.save(any(Document.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(idempotencyService.executeIdempotent(any(), any(), eq(Document.class)))
+                .thenAnswer(invocation -> invocation.<Supplier<Document>>getArgument(1).get());
 
-        Document saved = documentService.saveFile(12L, file);
+        Document saved = documentService.saveFile(12L, file, null);
 
         assertThat(saved.getApplicationId()).isEqualTo(12L);
         assertThat(saved.getFileName()).isEqualTo("aadhaar.pdf");
@@ -65,7 +73,10 @@ class DocumentServiceTest {
                 "content".getBytes()
         );
 
-        assertThatThrownBy(() -> documentService.saveFile(12L, file))
+        when(idempotencyService.executeIdempotent(any(), any(), eq(Document.class)))
+                .thenAnswer(invocation -> invocation.<Supplier<Document>>getArgument(1).get());
+
+        assertThatThrownBy(() -> documentService.saveFile(12L, file, null))
                 .isInstanceOf(CustomException.class)
                 .hasMessage("File must have a valid name");
     }

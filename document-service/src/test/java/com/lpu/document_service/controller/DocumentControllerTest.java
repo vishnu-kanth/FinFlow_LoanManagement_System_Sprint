@@ -18,6 +18,7 @@ import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,7 +48,7 @@ class DocumentControllerTest {
         doc.setId(1L);
         doc.setApplicationId(10L);
 
-        when(service.saveFile(eq(10L), any())).thenReturn(doc);
+        when(service.saveFile(eq(10L), any(), isNull())).thenReturn(doc);
 
         mockMvc.perform(multipart("/documents/upload")
                         .file(file)

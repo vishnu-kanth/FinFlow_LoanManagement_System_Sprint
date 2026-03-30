@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,7 +48,7 @@ class ApplicationControllerTest {
 
         ApplicationResponse response = new ApplicationResponse(1L, "DRAFT");
 
-        when(service.create(any(ApplicationRequest.class), eq(10L))).thenReturn(response);
+        when(service.create(any(ApplicationRequest.class), eq(10L), isNull())).thenReturn(response);
 
         mockMvc.perform(post("/applications")
                         .header("X-User-Id", "10")
