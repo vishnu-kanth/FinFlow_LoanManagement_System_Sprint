@@ -2,12 +2,10 @@ spring:
   application:
     name: DOCUMENT-SERVICE
   config:
-    import:
-      - optional:file:../FinFlow_Config_Server/application.yml
-      - optional:file:../FinFlow_Config_Server/DOCUMENT-SERVICE.yml
-      - optional:file:./FinFlow_Config_Server/application.yml
-      - optional:file:./FinFlow_Config_Server/DOCUMENT-SERVICE.yml
-      - optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+    import: "configserver:${CONFIG_SERVER_URL:http://localhost:8888}"
   cloud:
     config:
+      enabled: ${CONFIG_SERVER_ENABLED:true}
+      uri: ${CONFIG_SERVER_URL:http://localhost:8888}
       label: ${CONFIG_REPO_LABEL:main}
+      fail-fast: true

@@ -9,6 +9,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ServiceRoutes {
 
+    private static final String AUTH_SERVICE = "lb://AUTH-SERVICE";
+    private static final String APPLICATION_SERVICE = "lb://APPLICATION-SERVICE";
+    private static final String DOCUMENT_SERVICE = "lb://DOCUMENT-SERVICE";
+    private static final String ADMIN_SERVICE = "lb://ADMIN-SERVICE";
+
     private final JwtAuthFilter jwtAuthFilter;
 
     public ServiceRoutes(JwtAuthFilter jwtAuthFilter) {
@@ -23,74 +28,66 @@ public class ServiceRoutes {
                 // Swagger Docs
                 .route("auth-service-docs", r -> r
                         .path("/gateway/auth/v3/api-docs/**")
-                        .filters(f -> f
-                                .rewritePath("/gateway/auth/(?<segment>.*)", "/auth/${segment}")
-                        )
-                        .uri("lb://AUTH-SERVICE")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri(AUTH_SERVICE)
                 )
 
                 .route("application-service-docs", r -> r
                         .path("/gateway/applications/v3/api-docs/**")
-                        .filters(f -> f
-                                .rewritePath("/gateway/applications/(?<segment>.*)", "/applications/${segment}")
-                        )
-                        .uri("lb://APPLICATION-SERVICE")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri(APPLICATION_SERVICE)
                 )
 
                 .route("document-service-docs", r -> r
                         .path("/gateway/documents/v3/api-docs/**")
-                        .filters(f -> f
-                                .rewritePath("/gateway/documents/(?<segment>.*)", "/documents/${segment}")
-                        )
-                        .uri("lb://DOCUMENT-SERVICE")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri(DOCUMENT_SERVICE)
                 )
 
                 .route("admin-service-docs", r -> r
                         .path("/gateway/admin/v3/api-docs/**")
-                        .filters(f -> f
-                                .rewritePath("/gateway/admin/(?<segment>.*)", "/admin/${segment}")
-                        )
-                        .uri("lb://ADMIN-SERVICE")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri(ADMIN_SERVICE)
                 )
 
                 // Auth Service
                 .route("auth-service", r -> r
                         .path("/gateway/auth/**")
                         .filters(f -> f
-                                .rewritePath("/gateway/auth/(?<segment>.*)", "/auth/${segment}")
+                                .stripPrefix(1)
                                 .filter(jwtAuthFilter)
                         )
-                        .uri("lb://AUTH-SERVICE")
+                        .uri(AUTH_SERVICE)
                 )
 
                 // Application Service
                 .route("application-service", r -> r
                         .path("/gateway/applications/**")
                         .filters(f -> f
-                                .rewritePath("/gateway/applications/(?<segment>.*)", "/applications/${segment}")
+                                .stripPrefix(1)
                                 .filter(jwtAuthFilter)
                         )
-                        .uri("lb://APPLICATION-SERVICE")
+                        .uri(APPLICATION_SERVICE)
                 )
 
                 // Document Service
                 .route("document-service", r -> r
                         .path("/gateway/documents/**")
                         .filters(f -> f
-                                .rewritePath("/gateway/documents/(?<segment>.*)", "/documents/${segment}")
+                                .stripPrefix(1)
                                 .filter(jwtAuthFilter)
                         )
-                        .uri("lb://DOCUMENT-SERVICE")
+                        .uri(DOCUMENT_SERVICE)
                 )
 
                 // Admin Service
                 .route("admin-service", r -> r
                         .path("/gateway/admin/**")
                         .filters(f -> f
-                                .rewritePath("/gateway/admin/(?<segment>.*)", "/admin/${segment}")
+                                .stripPrefix(1)
                                 .filter(jwtAuthFilter)
                         )
-                        .uri("lb://ADMIN-SERVICE")
+                        .uri(ADMIN_SERVICE)
                 )
 
                 .build();

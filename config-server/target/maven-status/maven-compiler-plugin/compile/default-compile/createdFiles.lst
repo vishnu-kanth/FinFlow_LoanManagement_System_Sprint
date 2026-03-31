@@ -1,1 +1,2 @@
 com\lpu\config_server\ConfigServerApplication.class
+com\lpu\config_server\observability\StartupTraceEmitter.class

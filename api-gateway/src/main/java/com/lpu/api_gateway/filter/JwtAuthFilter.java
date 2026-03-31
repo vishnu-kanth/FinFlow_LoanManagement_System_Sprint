@@ -64,9 +64,9 @@ public class JwtAuthFilter implements GatewayFilter, Ordered {
 
         ServerWebExchange mutatedExchange = exchange.mutate()
                 .request(builder -> builder.headers(headers -> {
-                    headers.add("X-User-Email", username);
-                    headers.add("X-User-Role", role);
-                    headers.add("X-User-Id", String.valueOf(userId));
+                    headers.set("X-User-Email", username);
+                    headers.set("X-User-Role", role);
+                    headers.set("X-User-Id", String.valueOf(userId));
                 }))
                 .build();
 
@@ -79,7 +79,9 @@ public class JwtAuthFilter implements GatewayFilter, Ordered {
     }
 
     private boolean isPublicPath(String path) {
-        return path.contains("/v3/api-docs")
+        return path.equals("/actuator/health")
+                || path.startsWith("/actuator/health/")
+                || path.contains("/v3/api-docs")
                 || path.contains("/swagger-ui")
                 || path.contains("/swagger-resources")
                 || path.contains("/webjars")
